@@ -1,0 +1,92 @@
+def starter():
+	while True:
+		global pla1
+		global pla2
+		global player
+		imput = input('Who would like to start?[X, O]\n')
+		if imput == 'X':
+			pla1, pla2 = 'X', 'O'
+			player = pla1
+			break
+		elif imput == 'O':
+			pla1, pla2 = 'O', 'X'
+			player = pla1
+			break
+
+
+def board(liste):
+	print(f'\n\n  {liste[0]}  |  {liste[1]}  |  {liste[2]}  ')
+	print('-----------------')
+	print(f'  {liste[3]}  |  {liste[4]}  |  {liste[5]}  ')
+	print('-----------------')
+	print(f'  {liste[6]}  |  {liste[7]}  |  {liste[8]}  ')
+
+
+def placement():
+	while True:
+		location = input('Please enter a number from 1 to 9\n')
+		if location == '':
+			continue
+		if location.isdigit:
+			try:
+				location = int(location)
+			except ValueError:
+				continue
+			if location >= 1 and location <= 9 and positions[location - 1] == ' ':
+				positions[location - 1] = player
+				break
+
+def draw():
+	if not ' ' in positions:
+		print("It's a draw :((")
+		return True
+	return False
+
+
+def wincond():
+	cond1 = False
+	cond2 = False
+	for i in range(3):
+		if positions[i] == positions[i+3] == positions[i+6] != ' ':
+			cond1 = True
+	for j in range(0,7,3):
+		if positions[j] == positions[j+1] == positions[j+2] and positions[j] != ' ' and positions[j+1] != ' ' and positions[j+2] != ' ':
+			cond2 = True
+	cond3 = positions[0] == positions[4] == positions[8] != ' '
+	cond4 = positions[2] == positions[4] == positions[6] != ' '
+	return cond1 or cond2 or cond3 or cond4
+
+
+def turn():
+	global player
+	if player == pla1:
+		player = pla2
+	else:
+		player = pla1
+
+
+def replay():
+	while True:
+		imput = input('Would you like to play again?[Yes, No]\n')
+		if imput == 'No':
+			exit()
+		elif imput == 'Yes':
+			break
+
+
+while True:
+	positions = [' ']*9
+	starter()
+	board(['1', '2', '3', '4', '5', '6', '7', '8', '9'])
+	while True:
+		placement()
+		board(['1', '2', '3', '4', '5', '6', '7', '8', '9'])
+		board(positions)
+		if draw():
+			break
+		if wincond():
+			print(f'Congats player {player} for winning!')
+			break
+		turn()
+		print(f'Player {player} it is now your turn')
+	replay()
